@@ -3,7 +3,7 @@ project(
 	['c', 'cpp'],
 	version: '0.0.1',
 	license: 'MIT',
-	meson_version: '>=0.44.0',
+	meson_version: '>=0.48.0',
 )
 
 add_project_arguments('-DQT_STATICPLUGIN', '-DQT_PLUGIN', language: 'cpp')
@@ -14,7 +14,7 @@ qt5_modules = dependency('qt5', modules: [
 	'Gui',
 	'Quick',
 	'WaylandClient',
-])
+], private_headers: true, version: '>=5.12.0')
 wayland_client = dependency('wayland-client')
 wayland_protos = dependency('wayland-protocols')
 

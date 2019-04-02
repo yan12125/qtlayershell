@@ -18,8 +18,7 @@ public:
     LayerSurface(LayerShell *shell, QtWaylandClient::QWaylandWindow *window);
     virtual ~LayerSurface();
 
-    void setType(Qt::WindowType type,
-			QtWaylandClient::QWaylandWindow *transientParent) override;
+    void applyConfigure() override;
 
 private:
 	void zwlr_layer_surface_v1_configure(uint32_t serial,
@@ -28,6 +27,8 @@ private:
 
 	QtWaylandClient::QWaylandWindow *m_window;
 	LayerView *m_layerview;
+
+	QSize m_pendingSize = {0, 0};
 
 	friend class LayerView;
 };

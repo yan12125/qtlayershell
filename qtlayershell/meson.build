@@ -9,16 +9,7 @@ foreach module : private_modules
 endforeach
 qt_private = include_directories(private_module_includes)
 
-# https://github.com/mesonbuild/meson/issues/3470
-qtlayershell_moc_args = [
-	'-I/usr/include/qt',
-	'-I/usr/include/qt/QtWaylandClient/5.10.1',
-	'-I/usr/include/qt/QtWaylandClient/5.10.1/QtWaylandClient',
-	'-I/usr/include/qt/QtWaylandClient',
-	'-I/usr/include/qt/QtCore/5.10.1',
-	'-I/usr/include/qt/QtCore/5.10.1/QtCore',
-	'-I/usr/include/qt/QtCore',
-]
+qtlayershell_deps = [qt5_modules, wayland_client, lib_protos]
 
 qtlayershell_moc = qt5.preprocess(
 	moc_sources: [
@@ -27,10 +18,8 @@ qtlayershell_moc = qt5.preprocess(
 	moc_headers: [
 		'../include/QtLayerShell/layersurface_p.h',
 	],
-	moc_extra_arguments: qtlayershell_moc_args,
+	dependencies: qtlayershell_deps,
 )
-
-qtlayershell_deps = [qt5_modules, wayland_client, lib_protos]
 
 libqtlayershell = library(
 	'qtlayershell', [

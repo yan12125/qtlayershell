@@ -46,22 +46,20 @@ LayerSurface::~LayerSurface()
     destroy();
 }
 
-void LayerSurface::setType(Qt::WindowType type,
-		QtWaylandClient::QWaylandWindow *transientParent)
-{
-    Q_UNUSED(type) // TODO: popups
-    Q_UNUSED(transientParent)
-}
-
 void LayerSurface::zwlr_layer_surface_v1_closed()
 {
 	m_window->window()->close();
 }
 
+void LayerSurface::applyConfigure() {
+	m_window->resizeFromApplyConfigure(m_pendingSize);
+}
+
 void LayerSurface::zwlr_layer_surface_v1_configure(uint32_t serial,
 			uint32_t width, uint32_t height)
 {
-	m_window->configure(0, width, height);
+	m_pendingSize = {width, height};
+	m_window->applyConfigureWhenPossible();
 	ack_configure(serial);
 }
 
