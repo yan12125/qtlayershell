@@ -14,7 +14,8 @@ qt5_modules = dependency('qt5', modules: [
 	'Gui',
 	'Quick',
 	'WaylandClient',
-], private_headers: true, version: '>=5.12.0')
+        'XkbCommonSupport',
+], private_headers: true, version: '>=5.13.0')
 wayland_client = dependency('wayland-client')
 wayland_protos = dependency('wayland-protocols')
 
