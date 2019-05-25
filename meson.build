@@ -12,7 +12,7 @@ qt5 = import('qt5')
 qt5_modules = dependency('qt5', modules: [
 	'Core',
 	'Gui',
-	'Quick',
+	'Widgets',
 	'WaylandClient',
         'XkbCommonSupport',
 ], private_headers: true, version: '>=5.13.0')

@@ -1,40 +1,33 @@
-#include <QGuiApplication>
-#include <QQuickView>
-#include <QtLayerShell/LayerView>
+#include <QtWaylandClient/private/qwaylandwindow_p.h>
+#include <QApplication>
 #include <stdint.h>
+#include <QLabel>
+#include <QWindow>
+#include <QtLayerShell/layersurface_p.h>
 
-class DemoView : public QQuickView, public QtLayerShell::LayerView
-{
-public:
-	DemoView(uint32_t layer, const QString layer_namespace)
-		: QtLayerShell::LayerView(layer, layer_namespace)
-	{
-		setFlags(Qt::BypassWindowManagerHint | Qt::FramelessWindowHint);
-	}
-};
-
+using QtWaylandClient::QWaylandWindow;
+using QtLayerShell::LayerSurface;
 
 int main(int argc, char *argv[])
 {
 	qputenv("QT_QPA_PLATFORM", QByteArray("wayland"));
 	qputenv("QT_WAYLAND_SHELL_INTEGRATION", QByteArray("layer-shell"));
 
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
-	DemoView view(
-			QtLayerShell::LayerView::layer_bottom,
-			QString::fromUtf8("demo"));
-	view.setAnchor(QtLayerShell::LayerView::anchor_bottom
-			| QtLayerShell::LayerView::anchor_left
-			| QtLayerShell::LayerView::anchor_right);
-	view.setExclusiveZone(50);
-	view.setMargin(0, 100, 0, 100);
-	view.setKeyboardInteractivity(true);
+    QLabel label;
+    label.setText("Hello world!");
+    label.show();
 
-    view.setResizeMode(QQuickView::SizeRootObjectToView);
-    view.setSource(QUrl("qrc:/hello.qml"));
-	view.setHeight(50);
-    view.show();
+    QWindow* window = label.windowHandle();
+    QWaylandWindow* wWindow = dynamic_cast<QWaylandWindow*>(window->handle());
+    LayerSurface* surface = dynamic_cast<LayerSurface*>(wWindow->shellSurface());
+    surface->setAnchor(QtLayerShell::LayerSurface::anchor_bottom
+                    | QtLayerShell::LayerSurface::anchor_left
+                    | QtLayerShell::LayerSurface::anchor_right);
+    surface->setExclusiveZone(label.size().height());
+    surface->setMargin(0, 100, 0, 100);
+    surface->setKeyboardInteractivity(true);
 
     return app.exec();
 }

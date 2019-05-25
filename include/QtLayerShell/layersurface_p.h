@@ -7,8 +7,10 @@
 
 namespace QtLayerShell {
 
+using layer = QtWayland::zwlr_layer_shell_v1::layer;
+using anchor = QtWayland::zwlr_layer_surface_v1::anchor;
+
 class LayerShell;
-class LayerView;
 
 class LayerSurface : public QtWaylandClient::QWaylandShellSurface,
 	public QtWayland::zwlr_layer_surface_v1
@@ -18,6 +20,14 @@ public:
     LayerSurface(LayerShell *shell, QtWaylandClient::QWaylandWindow *window);
     virtual ~LayerSurface();
 
+	void setAnchor(uint32_t anchor);
+
+	void setExclusiveZone(int32_t zone);
+
+	void setMargin(int32_t top, int32_t right, int32_t bottom, int32_t left);
+
+	void setKeyboardInteractivity(bool interactive);
+
     void applyConfigure() override;
 
 private:
@@ -26,11 +36,17 @@ private:
 	void zwlr_layer_surface_v1_closed() override;
 
 	QtWaylandClient::QWaylandWindow *m_window;
-	LayerView *m_layerview;
 
 	QSize m_pendingSize = {0, 0};
 
-	friend class LayerView;
+	void apply();
+
+	uint32_t m_anchor = 0;
+	int32_t m_exclusive_zone = 0;
+	bool m_keyboard_interactivity = false;
+	struct {
+		int32_t top = 0, right = 0, bottom = 0, left = 0;
+	} m_margin;
 };
 
 }

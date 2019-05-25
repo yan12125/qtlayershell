@@ -23,7 +23,6 @@ qtlayershell_moc = qt5.preprocess(
 
 libqtlayershell = library(
 	'qtlayershell', [
-		'layerview.cpp',
 		'layershell.cpp',
 		'layershellintegration.cpp',
 		'layershellintegrationplugin.cpp',
