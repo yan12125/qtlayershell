@@ -1,8 +1,0 @@
-<!DOCTYPE RCC>
-<RCC version="1.0">
-
-<qresource prefix="/">
-    <file>hello.qml</file>
-</qresource>
-
-</RCC>
