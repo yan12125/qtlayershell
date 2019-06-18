@@ -87,4 +87,12 @@ void LayerSurface::zwlr_layer_surface_v1_configure(uint32_t serial,
 	ack_configure(serial);
 }
 
+LayerSurface* LayerSurface::fromQWindow(QWindow* window) {
+    QtWaylandClient::QWaylandWindow* wWindow = dynamic_cast<QtWaylandClient::QWaylandWindow*>(window->handle());
+    if (!wWindow) {
+        return nullptr;
+    }
+    return dynamic_cast<LayerSurface*>(wWindow->shellSurface());
+}
+
 }
